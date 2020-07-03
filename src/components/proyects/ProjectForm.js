@@ -3,11 +3,12 @@ import ProjectContext from "../../ context/projects/ProjectContext";
 
 const ProjectForm = () => {
     // get form state
-    const {form, showForm} = useContext(ProjectContext);
+    const {form, formError, showForm, addProject, showError} = useContext(ProjectContext);
 
-    const [project, setProject] = useState({
+    const projectInitState = {
         name: ""
-    });
+    };
+    const [project, setProject] = useState(projectInitState);
     const {name} = project;
 
     // read input value
@@ -23,10 +24,15 @@ const ProjectForm = () => {
         e.preventDefault();
 
         // Validations
+        if (name.trim() === "") {
+            showError();
+            return;
+        }
 
         // add to state
-
+        addProject(project);
         // reset form
+        setProject(projectInitState);
     }
 
     return (
@@ -60,6 +66,7 @@ const ProjectForm = () => {
                     </form>
                 ) : null
             }
+            {formError ? <p className="error message">Project's name is required</p> : null}
         </Fragment>
     );
 }

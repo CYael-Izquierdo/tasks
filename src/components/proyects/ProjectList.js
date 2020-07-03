@@ -13,14 +13,17 @@ const ProjectList = () => {
 
     if (projects.length === 0) return null;
     return (
-        <ul className="project-list">
-            {projects.map(project =>
-                <Project
-                    key={project.id}
-                    project={project}
-                />
-            )}
-        </ul>
+        <div className="projects">
+            <h2>Your Projects</h2>
+            <ul className="project-list">
+                {projects.map(project =>
+                    <Project
+                        key={project.id}
+                        project={project}
+                    />
+                )}
+            </ul>
+        </div>
     );
 }
 

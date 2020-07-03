@@ -1,14 +1,17 @@
 import React, {useReducer} from "react"
+import uuid from "uuid/dist/v4";
 
 import ProjectContext from "./ProjectContext";
 import projectReducer from "./ProjectReducer";
 
-import {GET_PROJECTS, PROJECT_FORM} from "../../types";
+import {ADD_PROJECT, DELETE_PROJECT, GET_PROJECTS, PROJECT_FORM, SELECT_PROJECT, VERIFY_FORM} from "../../types";
 
 const useProjectState = props => {
     const initialState = {
         form: false,
-        projects: []
+        formError: false,
+        projects: [],
+        project: null
     };
 
     const projects = [
@@ -37,16 +40,50 @@ const useProjectState = props => {
         });
     }
 
+    const addProject = project => {
+        project.id = uuid();
+        dispatch({
+            type: ADD_PROJECT,
+            payload: project
+        });
+    }
+
+    const showError = () => {
+        dispatch({
+            type: VERIFY_FORM
+        });
+    }
+
+    const selectProject = projectId => {
+        dispatch({
+            type: SELECT_PROJECT,
+            payload: projectId
+        });
+    }
+
+    const deleteProject = projectID => {
+        dispatch({
+            type: DELETE_PROJECT,
+            payloadType: projectID
+        });
+    }
+
     return (
         <ProjectContext.Provider
             value={{
                 // States
                 form: state.form,
+                formError: state.formError,
                 projects: state.projects,
+                project: state.project,
 
                 // Functions
                 showForm,
-                getProjects
+                showError,
+                getProjects,
+                addProject,
+                selectProject,
+                deleteProject
             }}
         >
             {props.children}
